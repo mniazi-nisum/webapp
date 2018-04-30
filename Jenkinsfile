@@ -4,9 +4,17 @@ pipeline {
                 stage('Build'){
                     steps{
                         sh "/usr/local/maven/bin/mvn clean package"
-                            
                     }
                 }
-                
+                stage('Test'){
+                    steps{
+                        sh "${MAVEN_HOME}/bin/mvn test"
+                    }
+                } 
+                stage('Deploy_WebApp'){
+                    steps{
+                        sh 'scp -i /root/keys/id_rsa /WebApp.war devops
+                    }
+                }
             }
 }
