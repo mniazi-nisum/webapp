@@ -8,13 +8,21 @@ pipeline {
                 }
                 stage('Test'){
                     steps{
-                        sh "${MAVEN_HOME}/bin/mvn test"
+                        sh "/usr/local/maven/bin/mvn test"
                     }
                 } 
-                stage('Deploy_WebApp'){
+                stage('Deploy'){
                     steps{
-                        sh 'scp -i /root/keys/id_rsa /WebApp.war devops
+                        when{
+                            expression{
+                                currentBuild.result==null || currentBuild.result == 'SUCCESS'
+                            }
+                        }
+                    steps{
+                        sh 'make publish'
+                    }
                     }
                 }
             }
 }
+
